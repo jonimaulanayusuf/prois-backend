@@ -4,6 +4,13 @@ PROIS Backend API is a RESTful service for [PROIS (Procurement Information Syste
 
 ---
 
+## ⚡ Postman Collection
+
+Find the complete **Postman Collection** for testing and exploring all available API endpoints here:
+- [PROIS Backend API – Postman Collection](https://github.com/user-attachments/files/24309873/Prois.Backend.postman_collection.json)
+
+---
+
 ## ✅ Requirements
 
 - Go 1.24+
@@ -29,7 +36,21 @@ Copy the environment example file:
 cp .env.example .env
 ```
 
-Configure the database, purchase webhook, JWT secret, and any other required settings in the .env file.
+Configure the database, purchase webhook, JWT secret, and any other required settings in the .env file:
+
+```bash
+APP_PORT=3001
+
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=
+DB_NAME=prois_db
+
+JWT_SECRET= # example: verysecret
+ENC_SECRET= # example: verysecret
+PURCHASE_WEBHOOK_URL= # example: https://webhook.site/1fef1af8-2f72-4a28-b8e6-8ed7e88a5259
+```
 
 ### 3. Install Dependencies
 
