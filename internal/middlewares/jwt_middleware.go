@@ -1,8 +1,6 @@
 package middlewares
 
 import (
-	"strings"
-
 	"prois-backend/internal/config"
 	"prois-backend/internal/database"
 	"prois-backend/internal/models"
@@ -14,20 +12,17 @@ import (
 
 func JWTProtected() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		authHeader := c.Get("Authorization")
-
-		if authHeader == "" {
-			return utils.ResBadRequest(c, "Missing token")
+		tokenString := c.Cookies("access_token")
+		if tokenString == "" {
+			return utils.ResUnauthorized(c)
 		}
-
-		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 
 		token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
 			return []byte(config.GetEnv("JWT_SECRET", "secret")), nil
 		})
 
 		if err != nil || !token.Valid {
-			return utils.ResInvalidCredential(c)
+			return utils.ResUnauthorized(c)
 		}
 
 		claims := token.Claims.(jwt.MapClaims)
@@ -35,7 +30,7 @@ func JWTProtected() fiber.Handler {
 
 		var user models.User
 		if err := database.DB.First(&user, userID).Error; err != nil {
-			return utils.ResInvalidCredential(c)
+			return utils.ResUnauthorized(c)
 		}
 
 		c.Locals("user_id", userID)

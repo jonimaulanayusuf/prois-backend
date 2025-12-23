@@ -48,10 +48,17 @@ func Register(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to generate token")
 	}
 
-	return utils.ResCreated(c, fiber.Map{
-		"user":  user,
-		"token": token,
+	// add jwt to http-only cookie
+	c.Cookie(&fiber.Cookie{
+		Name:     "access_token",
+		Value:    token,
+		HTTPOnly: true,
+		Secure:   config.GetEnv("APP_ENV", "local") == "production",
+		SameSite: fiber.CookieSameSiteStrictMode,
+		Path:     "/",
 	})
+
+	return utils.ResCreated(c, user)
 }
 
 func Login(c *fiber.Ctx) error {
@@ -62,11 +69,11 @@ func Login(c *fiber.Ctx) error {
 
 	var user models.User
 	if err := database.DB.Where("username = ?", data.Username).First(&user).Error; err != nil {
-		return utils.ResInvalidCredential(c)
+		return utils.ResUnauthorized(c)
 	}
 
 	if !utils.CheckPasswordHash(data.Password, user.Password) {
-		return utils.ResInvalidCredential(c)
+		return utils.ResUnauthorized(c)
 	}
 
 	token, err := utils.GenerateJWT(
@@ -79,10 +86,17 @@ func Login(c *fiber.Ctx) error {
 		return utils.ResInternalError(c, "Failed to generate token")
 	}
 
-	return utils.ResSuccess(c, fiber.Map{
-		"user":  user,
-		"token": token,
+	// add jwt to http-only cookie
+	c.Cookie(&fiber.Cookie{
+		Name:     "access_token",
+		Value:    token,
+		HTTPOnly: true,
+		Secure:   config.GetEnv("APP_ENV", "local") == "production",
+		SameSite: fiber.CookieSameSiteStrictMode,
+		Path:     "/",
 	})
+
+	return utils.ResSuccess(c, user)
 }
 
 func GetCurrentUser(c *fiber.Ctx) error {
@@ -93,7 +107,5 @@ func GetCurrentUser(c *fiber.Ctx) error {
 		return utils.ResNotFound(c)
 	}
 
-	return utils.ResSuccess(c, fiber.Map{
-		"user": user,
-	})
+	return utils.ResSuccess(c, user)
 }

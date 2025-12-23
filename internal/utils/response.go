@@ -5,9 +5,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func ResInvalidCredential(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-		"message": "Invalid credential",
+func ResUnauthorized(c *fiber.Ctx) error {
+	return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		"message": "Unauthenticated",
 	})
 }
 

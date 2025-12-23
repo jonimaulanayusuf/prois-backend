@@ -19,6 +19,7 @@ func GetPurchasingHistory(c *fiber.Ctx) error {
 	var result []models.Purchasing
 	var total int64
 
+	search := c.Query("search")
 	page := c.QueryInt("page", 1)
 	limit := c.QueryInt("limit", 10)
 
@@ -28,6 +29,10 @@ func GetPurchasingHistory(c *fiber.Ctx) error {
 
 	offset := (page - 1) * limit
 	query := database.DB.Model(&models.Purchasing{})
+
+	if search != "" {
+		query = query.Where("id LIKE ?", "%"+search+"%")
+	}
 
 	query.Preload("Supplier")
 	query.Preload("Details.Item")
@@ -44,17 +49,17 @@ func GetPurchasingHistory(c *fiber.Ctx) error {
 }
 
 func GetPurchasingDetail(c *fiber.Ctx) error {
-	_id := c.Params("id")
-	id := utils.DecryptID(_id)
+	id := c.Params("id")
 
 	var row models.Purchasing
 
-	errs := database.DB.
+	err := database.DB.
 		Preload("Supplier").
 		Preload("Details.Item").
-		First(&row, id).Error
+		Where("id = ?", id).
+		First(&row).Error
 
-	if errs != nil {
+	if err != nil {
 		return utils.ResNotFound(c)
 	}
 
@@ -86,7 +91,14 @@ func CreatePurchasing(c *fiber.Ctx) error {
 			return fiber.NewError(fiber.StatusNotFound, "Supplier ID not found")
 		}
 
+		invoice, errInv := utils.GenerateInvoiceNumber()
+
+		if errInv != nil {
+			return errInv
+		}
+
 		purchasing = models.Purchasing{
+			ID:         invoice,
 			Date:       time.Now(),
 			SupplierID: *SupplierID,
 			UserID:     userID,
@@ -151,17 +163,20 @@ func CreatePurchasing(c *fiber.Ctx) error {
 	errFind := database.DB.
 		Preload("Supplier").
 		Preload("Details.Item").
-		First(&row, purchasing.ID).Error
+		Where("id = ?", purchasing.ID).
+		First(&row).Error
 
 	if errFind != nil {
 		return utils.ResNotFound(c)
 	}
 
+	output := resources.FromPurchasing(row)
+
 	go func() {
-		if err := utils.SendPurchaseWebhook(row); err != nil {
+		if err := utils.SendPurchaseWebhook(output); err != nil {
 			log.Println("Webhook error:", err)
 		}
 	}()
 
-	return utils.ResCreated(c, resources.FromPurchasing(row))
+	return utils.ResCreated(c, output)
 }

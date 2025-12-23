@@ -2,7 +2,6 @@ package resources
 
 import (
 	"prois-backend/internal/models"
-	"prois-backend/internal/utils"
 	"time"
 )
 
@@ -21,7 +20,7 @@ func FromPurchasingForSummary(data models.Purchasing) PurchasingSummaryResource 
 	}
 
 	return PurchasingSummaryResource{
-		ID:           utils.EncryptID(data.ID),
+		ID:           data.ID,
 		Date:         data.Date,
 		SupplierName: data.Supplier.Name,
 		GrandTotal:   data.GrandTotal,
