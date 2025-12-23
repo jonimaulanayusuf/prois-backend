@@ -8,6 +8,7 @@ import (
 	"prois-backend/internal/config"
 	"prois-backend/internal/database"
 	"prois-backend/internal/routes"
+	"prois-backend/internal/utils"
 )
 
 func main() {
@@ -16,14 +17,12 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/health", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"status": "ok",
-		})
+	app.Get("/", func(c *fiber.Ctx) error {
+		return utils.ResMessage(c, fiber.StatusOK, "Welcome to Prois Backend 👋")
 	})
 
 	routes.AppRoutes(app)
 
-	port := config.GetEnv("APP_PORT", "3000")
+	port := config.GetEnv("APP_PORT", "3001")
 	log.Fatal(app.Listen(":" + port))
 }

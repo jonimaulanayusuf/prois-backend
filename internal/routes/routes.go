@@ -8,9 +8,7 @@ import (
 
 func AppRoutes(app *fiber.App) {
 	AuthRoutes(app.Group("/auth"))
-
-	protected := app.Group("/", middlewares.JWTProtected())
-	PurchasingRoutes(protected.Group("/purchasings"))
-	ItemRoutes(protected.Group("/items"))
-	SupplierRoutes(protected.Group("/suppliers"))
+	PurchasingRoutes(app.Group("/purchasings", middlewares.JWTProtected()))
+	ItemRoutes(app.Group("/items", middlewares.JWTProtected()))
+	SupplierRoutes(app.Group("/suppliers", middlewares.JWTProtected()))
 }

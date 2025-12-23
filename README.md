@@ -1,8 +1,6 @@
 # PROIS Backend API
 
-PROIS Backend API is a RESTful service for PROIS (Procurement Information System) built with **Golang** using a modular and scalable architecture.
-
-This project is designed to provide a clean, maintainable backend foundation for modern web applications.
+PROIS Backend API is a RESTful service for [PROIS (Procurement Information System)](https://github.com/jonimaulanayusuf/prois) built with **Fiber** and **GORM**.
 
 ---
 
@@ -20,7 +18,7 @@ This project is designed to provide a clean, maintainable backend foundation for
 
 ```bash
 git clone https://github.com/jonimaulanayusuf/prois-backend.git
-cd prois
+cd prois-backend
 ```
 
 ### 2. Environment Setup
@@ -29,7 +27,6 @@ Copy the environment example file:
 
 ```bash
 cp .env.example .env
-vim .env
 ```
 
 Configure the database and application settings in the .env file.
@@ -48,5 +45,5 @@ go run cmd/main.go
 
 Backend server will be running at:
 ```
-http://localhost:3000
+http://localhost:3001
 ```
