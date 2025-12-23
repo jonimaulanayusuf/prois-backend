@@ -29,7 +29,7 @@ Copy the environment example file:
 cp .env.example .env
 ```
 
-Configure the database and application settings in the .env file.
+Configure the database, purchase webhook, JWT secret, and any other required settings in the .env file.
 
 ### 3. Install Dependencies
 
