@@ -7,7 +7,7 @@ PROIS Backend API is a RESTful service for [PROIS (Procurement Information Syste
 ## ⚡ Postman Collection
 
 Find the complete **Postman Collection** for testing and exploring all available API endpoints here:
-- [PROIS Backend API – Postman Collection](https://github.com/user-attachments/files/24309873/Prois.Backend.postman_collection.json)
+- [PROIS Backend API – Postman Collection](https://github.com/user-attachments/files/24320921/Prois.Backend.postman_collection.json)
 
 ---
 
