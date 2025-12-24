@@ -7,7 +7,7 @@ PROIS Backend API is a RESTful service for [PROIS (Procurement Information Syste
 ## ⚡ Postman Collection
 
 Find the complete **Postman Collection** for testing and exploring all available API endpoints here:
-- [PROIS Backend API – Postman Collection](https://github.com/user-attachments/files/24321918/Prois.Backend.postman_collection.json)
+- [PROIS Backend API – Postman Collection](https://github.com/user-attachments/files/24330782/Prois.Backend.postman_collection.json)
 
 ---
 
@@ -39,6 +39,7 @@ cp .env.example .env
 Configure the database, purchase webhook, JWT secret, and any other required settings in the .env file:
 
 ```bash
+APP_ENV=local
 APP_PORT=3001
 
 DB_HOST=127.0.0.1
