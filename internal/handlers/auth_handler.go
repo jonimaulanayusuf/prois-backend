@@ -52,7 +52,7 @@ func Register(c *fiber.Ctx) error {
 	// add jwt to http-only cookie
 	sameSite := fiber.CookieSameSiteStrictMode
 	if config.GetEnv("APP_ENV", "local") != "production" {
-		sameSite = fiber.CookieSameSiteLaxMode
+		sameSite = fiber.CookieSameSiteNoneMode
 	}
 
 	c.Cookie(&fiber.Cookie{
@@ -95,7 +95,7 @@ func Login(c *fiber.Ctx) error {
 	// add jwt to http-only cookie
 	sameSite := fiber.CookieSameSiteStrictMode
 	if config.GetEnv("APP_ENV", "local") != "production" {
-		sameSite = fiber.CookieSameSiteLaxMode
+		sameSite = fiber.CookieSameSiteNoneMode
 	}
 
 	c.Cookie(&fiber.Cookie{
@@ -124,7 +124,7 @@ func GetCurrentUser(c *fiber.Ctx) error {
 func Logout(c *fiber.Ctx) error {
 	sameSite := fiber.CookieSameSiteStrictMode
 	if config.GetEnv("APP_ENV", "local") != "production" {
-		sameSite = fiber.CookieSameSiteLaxMode
+		sameSite = fiber.CookieSameSiteNoneMode
 	}
 
 	c.Cookie(&fiber.Cookie{
