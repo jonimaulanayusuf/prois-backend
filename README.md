@@ -50,6 +50,7 @@ DB_NAME=prois_db
 JWT_SECRET= # example: verysecret
 ENC_SECRET= # example: verysecret
 PURCHASE_WEBHOOK_URL= # example: https://webhook.site/1fef1af8-2f72-4a28-b8e6-8ed7e88a5259
+ALLOWED_ORIGINS= # default is "*", example: http://localhost:5500
 ```
 
 ### 3. Install Dependencies
