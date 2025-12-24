@@ -13,4 +13,5 @@ func AuthRoutes(route fiber.Router) {
 
 	// protected
 	route.Get("/me", middlewares.JWTProtected(), handlers.GetCurrentUser)
+	route.Delete("/logout", middlewares.JWTProtected(), handlers.Logout)
 }

@@ -6,6 +6,7 @@ import (
 	"prois-backend/internal/models"
 	"prois-backend/internal/requests"
 	"prois-backend/internal/utils"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -69,11 +70,11 @@ func Login(c *fiber.Ctx) error {
 
 	var user models.User
 	if err := database.DB.Where("username = ?", data.Username).First(&user).Error; err != nil {
-		return utils.ResUnauthorized(c)
+		return utils.ResBadRequest(c, "Wrong username or password")
 	}
 
 	if !utils.CheckPasswordHash(data.Password, user.Password) {
-		return utils.ResUnauthorized(c)
+		return utils.ResBadRequest(c, "Wrong username or password")
 	}
 
 	token, err := utils.GenerateJWT(
@@ -108,4 +109,19 @@ func GetCurrentUser(c *fiber.Ctx) error {
 	}
 
 	return utils.ResSuccess(c, user)
+}
+
+func Logout(c *fiber.Ctx) error {
+	c.Cookie(&fiber.Cookie{
+		Name:     "access_token",
+		Value:    "",
+		Path:     "/",
+		Expires:  time.Unix(0, 0),
+		MaxAge:   -1,
+		HTTPOnly: true,
+		Secure:   config.GetEnv("APP_ENV", "local") == "production",
+		SameSite: fiber.CookieSameSiteStrictMode,
+	})
+
+	return utils.ResSuccess(c, nil)
 }
