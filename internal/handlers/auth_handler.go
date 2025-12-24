@@ -50,13 +50,18 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	// add jwt to http-only cookie
+	sameSite := fiber.CookieSameSiteStrictMode
+	if config.GetEnv("APP_ENV", "local") != "production" {
+		sameSite = fiber.CookieSameSiteLaxMode
+	}
+
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
 		Value:    token,
+		Path:     "/",
 		HTTPOnly: true,
 		Secure:   config.GetEnv("APP_ENV", "local") == "production",
-		SameSite: fiber.CookieSameSiteStrictMode,
-		Path:     "/",
+		SameSite: sameSite,
 	})
 
 	return utils.ResCreated(c, user)
@@ -88,13 +93,18 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	// add jwt to http-only cookie
+	sameSite := fiber.CookieSameSiteStrictMode
+	if config.GetEnv("APP_ENV", "local") != "production" {
+		sameSite = fiber.CookieSameSiteLaxMode
+	}
+
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
 		Value:    token,
+		Path:     "/",
 		HTTPOnly: true,
 		Secure:   config.GetEnv("APP_ENV", "local") == "production",
-		SameSite: fiber.CookieSameSiteStrictMode,
-		Path:     "/",
+		SameSite: sameSite,
 	})
 
 	return utils.ResSuccess(c, user)
@@ -112,15 +122,20 @@ func GetCurrentUser(c *fiber.Ctx) error {
 }
 
 func Logout(c *fiber.Ctx) error {
+	sameSite := fiber.CookieSameSiteStrictMode
+	if config.GetEnv("APP_ENV", "local") != "production" {
+		sameSite = fiber.CookieSameSiteLaxMode
+	}
+
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
 		Value:    "",
 		Path:     "/",
-		Expires:  time.Unix(0, 0),
-		MaxAge:   -1,
 		HTTPOnly: true,
 		Secure:   config.GetEnv("APP_ENV", "local") == "production",
-		SameSite: fiber.CookieSameSiteStrictMode,
+		SameSite: sameSite,
+		Expires:  time.Unix(0, 0),
+		MaxAge:   -1,
 	})
 
 	return utils.ResSuccess(c, nil)

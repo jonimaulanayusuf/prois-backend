@@ -18,11 +18,12 @@ func main() {
 
 	app := fiber.New()
 
-	allowedOrigins := config.GetEnv("ALLOWED_ORIGINS", "*")
+	allowedOrigins := config.GetEnv("ALLOWED_ORIGINS", "*") // ini ngambil dari env dan sudah di make sure
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: allowedOrigins,
-		AllowMethods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowOrigins:     allowedOrigins,
+		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowCredentials: true,
 	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {

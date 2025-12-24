@@ -62,7 +62,7 @@ func GetPurchasingDetail(c *fiber.Ctx) error {
 		return utils.ResNotFound(c)
 	}
 
-	return utils.ResCreated(c, resources.FromPurchasing(row))
+	return utils.ResSuccess(c, resources.FromPurchasing(row))
 }
 
 func CreatePurchasing(c *fiber.Ctx) error {
