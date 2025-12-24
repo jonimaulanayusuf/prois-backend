@@ -2,12 +2,11 @@ package resources
 
 import (
 	"prois-backend/internal/models"
-	"time"
 )
 
 type PurchasingResource struct {
 	ID         string                     `json:"id"`
-	Date       time.Time                  `json:"date"`
+	Date       string                     `json:"date"`
 	Supplier   SupplierResource           `json:"supplier"`
 	GrandTotal float64                    `json:"grand_total"`
 	Details    []PurchasingDetailResource `json:"details"`

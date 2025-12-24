@@ -2,15 +2,14 @@ package resources
 
 import (
 	"prois-backend/internal/models"
-	"time"
 )
 
 type PurchasingSummaryResource struct {
-	ID           string    `json:"id"`
-	Date         time.Time `json:"date"`
-	SupplierName string    `json:"supplier_name"`
-	GrandTotal   float64   `json:"grand_total"`
-	CreatedAt    string    `json:"created_at"`
+	ID           string  `json:"id"`
+	Date         string  `json:"date"`
+	SupplierName string  `json:"supplier_name"`
+	GrandTotal   float64 `json:"grand_total"`
+	CreatedAt    string  `json:"created_at"`
 }
 
 func FromPurchasingForSummary(data models.Purchasing) PurchasingSummaryResource {

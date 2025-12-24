@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"log"
-	"time"
 
 	"prois-backend/internal/database"
 	"prois-backend/internal/models"
@@ -99,7 +98,7 @@ func CreatePurchasing(c *fiber.Ctx) error {
 
 		purchasing = models.Purchasing{
 			ID:         invoice,
-			Date:       time.Now(),
+			Date:       data.Date,
 			SupplierID: *SupplierID,
 			UserID:     userID,
 		}
